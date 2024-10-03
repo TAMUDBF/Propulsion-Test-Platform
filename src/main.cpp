@@ -2,7 +2,7 @@
 #include <Adafruit_BNO08x.h>
 #include <HX711.h>
 #include <SdFat.h>
-#include <castle_link.h>
+#include <castleLink.h>
 void setup() {
 
 }
