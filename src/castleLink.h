@@ -4,24 +4,22 @@
 
 class castleLink{
 private:
-    static TeensyTimerTool::PeriodicTimer t20ms;
-    static TeensyTimerTool::OneShotTimer tthr;
-    static volatile unsigned long startTime;
-    static volatile int pulseCount;
-    static volatile bool pulsed,ontimer;
-    static int pin;
-    #define conversion = {1f,20f,4f,50f,1f,0.2502f,20416.7f,4f,4f,30f,1f};
-    //float values = {&voltage, &ripVoltage, &current, &escThrottle, &power, &rpm, &becVoltage, &becCurent, &temp };
+    inline static TeensyTimerTool::PeriodicTimer t20ms;
+    inline static TeensyTimerTool::OneShotTimer tthr;
+    inline static volatile unsigned long startTime;
+    inline static volatile int pulseCount,pulseOffset,pulse1ms;
+    inline static volatile float pulseCal;
+    inline static volatile bool pulsed,ontimer;
+    inline static int pin;
+    inline static volatile int throttle;
+    inline static constexpr float conversion[11] = {1,20,4,50,1,0.2502,20416.7,4,4,30,1};
     static void t20msISR();
     static void tthrISR();
     static void pulseISR();
 public:
-    static volatile int throttle;
     bool begin(int pin);
     void setThrottle(int throttle);
-    
-    static volatile float voltage,ripVoltage,current,escThrottle,power,rpm,becVoltage,becCurent,temp;
-
+    inline static volatile float voltage,ripVoltage,current,escThrottle,power,rpm,becVoltage,becCurent,temp;
 };
 
 #endif
