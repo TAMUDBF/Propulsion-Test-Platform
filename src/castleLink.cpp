@@ -1,17 +1,21 @@
-#include "TeensyTimerTool.h"
+#include "TimerOne.h"
 #include <CastleLink.h>
 
 
 bool castleLink::begin(int pin){
     pin = pin;
-    t20ms.begin(t20msISR, 20'000, false);
-    tthr.begin(tthrISR);
+    
     pulseOffset = 500;
     throttle = 1000;
+    tempThrottle = 1000;
+    ontimer = false;
+    Timer1.initialize(throttle);
+    Timer1.attachInterrupt(tthrISR, throttle);
     return true;
 };
 
 void castleLink::t20msISR(){
+    throttle = tempThrottle;
     detachInterrupt(digitalPinToInterrupt(pin));
     pinMode(pin,OUTPUT);
     digitalWrite(pin,0);
@@ -20,13 +24,14 @@ void castleLink::t20msISR(){
     }
     pulsed = false;
     ontimer = false;
-    tthr.trigger(throttle);
+    Timer1.attachInterrupt(t20msISR,throttle);
     
     return;
 };
 
 void castleLink::tthrISR(){
     if (ontimer){
+        Timer1.attachInterrupt(t20msISR,20000-throttle-10);
         ontimer = false;
         pinMode(pin,INPUT_PULLUP);
         attachInterrupt(digitalPinToInterrupt(pin),pulseISR,FALLING);
@@ -34,7 +39,7 @@ void castleLink::tthrISR(){
         digitalWrite(pin,1);
         ontimer = true;
         startTime = micros();
-        tthr.trigger(10);
+        Timer1.setPeriod(10);
     }
     return;
 }
