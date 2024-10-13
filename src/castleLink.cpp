@@ -34,7 +34,7 @@ void castleLink::tthrISR(){
         digitalWrite(pin,1);
         ontimer = true;
         startTime = micros();
-        tthr.trigger(10);
+        tthr.trigger(1);
     }
     return;
 }
@@ -89,6 +89,6 @@ void castleLink::pulseISR(){
     return;
 }
 
-void castleLink::setThrottle(int throttlePer){
+void castleLink::setThrottle(float throttlePer){
     throttle = 1000+1000*throttlePer;
 }
